@@ -11,13 +11,13 @@ class FramePreview(tkinter.LabelFrame):
         super().__init__(master)
         self.config(text="FramePreview")
         self.setting = FramePreviewSetting(self)
-        self.setting.pack(fill='x')
+        self.setting.pack(fill="x")
         self.body = FramePreviewBody(self)
-        self.body.pack(fill='x')
+        self.body.pack(fill="x")
         self.setting.event_clear_callback = self._setting_callback_clear
 
         self.setting.entry_direct.bind("<Return>", self.event_direct)
-        self.setting.button_load.bind('<Button-1>', self.event_direct)
+        self.setting.button_load.bind("<Button-1>", self.event_direct)
 
     def event_direct(self, event):
         path = self.setting.entry_direct.get()
@@ -46,10 +46,11 @@ class FramePreview(tkinter.LabelFrame):
     def set_size(self, w, h):
         self.setting.update_idletasks()
         f_setting_h = self.setting.winfo_height()
-        #self.frame_list.set_size(w,h-100)
-        self.body.set_size(w,h-f_setting_h)
+        # self.frame_list.set_size(w,h-100)
+        self.body.set_size(w, h - f_setting_h)
 
-if __name__ == '__main__' :
+
+if __name__ == "__main__":
     root = tkinter.Tk()
     hoge = FramePreview(root)
     hoge.pack()

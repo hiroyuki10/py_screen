@@ -1,7 +1,7 @@
 from .viewer_tk import *
 
 
-class Viewer():
+class Viewer:
     def __init__(self):
         self._window = None
 

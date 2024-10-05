@@ -18,10 +18,20 @@ class FramePreviewBody(FrameThumbnail):
         self.viewer.show_image(i)
 
     def _bind_button(self, button, _name):
-        button.bind("<Button-1>", lambda event, num=len(self.buttons), name=_name: self._left_callback(event, num, name))
-        button.bind("<Button-3>", lambda event, num=len(self.buttons), name=_name: self._right_callback(event, num, name))
-        button.bind("<MouseWheel>",  self._on_mousewheel)
-        return button 
+        button.bind(
+            "<Button-1>",
+            lambda event, num=len(self.buttons), name=_name: self._left_callback(
+                event, num, name
+            ),
+        )
+        button.bind(
+            "<Button-3>",
+            lambda event, num=len(self.buttons), name=_name: self._right_callback(
+                event, num, name
+            ),
+        )
+        button.bind("<MouseWheel>", self._on_mousewheel)
+        return button
 
     def _left_callback(self, event, num, name):
         self.viewer.show_image(num)
@@ -33,7 +43,7 @@ class FramePreviewBody(FrameThumbnail):
         del Param.source_list[num]
         del self.th_images[num]
         for i, img in enumerate(self.th_images[num:]):
-            self.buttons[i+num].config(image=img)
+            self.buttons[i + num].config(image=img)
         self.buttons[-1].destroy()  # GUI上から消す
         self.buttons.pop()  # destroyではリストでは消えないのでここで消す
 
