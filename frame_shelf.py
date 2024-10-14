@@ -125,6 +125,7 @@ class FrameShelf(tkinter.LabelFrame):
                 if ext in img_ext:
                     image_lists.append(path)
                     break
+        image_lists.sort(key=os.path.getmtime, reverse=True)
         return image_lists
 
     def dir_callback(self):
