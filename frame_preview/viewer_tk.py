@@ -1,7 +1,11 @@
 import tkinter
 from PIL import Image
 from PIL import ImageTk
-from .frame_preview_param import FramePreviewParam as Param
+
+if __name__ == "__main__":
+    from frame_preview_param import FramePreviewParam as Param
+else:
+    from .frame_preview_param import FramePreviewParam as Param
 
 
 class ViewerTk(tkinter.Toplevel):
