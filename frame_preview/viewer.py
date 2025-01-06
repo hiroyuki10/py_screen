@@ -1,4 +1,4 @@
-from .viewer_tk import *
+from .viewer_tk import ViewerTk
 
 
 class Viewer:

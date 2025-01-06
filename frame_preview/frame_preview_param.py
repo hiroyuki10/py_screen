@@ -35,6 +35,9 @@ class FramePreviewParam:
     def add_source_list(_path, image):
         __class__.source_list.append([_path, image])
 
+    def get_image_num():
+        return len(__class__.source_list)
+
     def get_source_images():
         images = []
         for tmp in __class__.source_list:
