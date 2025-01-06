@@ -17,12 +17,12 @@ class FrameScreenshot(tkinter.LabelFrame):
         super().__init__(master)
 
         self.resize_size = [200, 200]
-        self.calc_range_size = [0,210,1080,1780]
+        self.calc_range_size = [0, 210, 1080, 1780]
         # self.save_range_size = [0,210,1080,1780]
-        self.save_range_size = [0,100,1080,1890] # fuz
-        self.green = '#80FF80'
-        self.red = '#FF8080'
-        self.off = '#F0F0ED'
+        self.save_range_size = [0, 100, 1080, 1890]  # fuz
+        self.green = "#80FF80"
+        self.red = "#FF8080"
+        self.off = "#F0F0ED"
         self.flag_start = False
         self.flag_auto = False
         self.flag_screenshot_ok = True
@@ -35,7 +35,9 @@ class FrameScreenshot(tkinter.LabelFrame):
         self.button_start.grid(sticky=tkinter.W)
 
         self.flag_save = tkinter.BooleanVar()
-        self.chkbtn_save = tkinter.Checkbutton(master=self, text="add_canvas", variable=self.flag_save)
+        self.chkbtn_save = tkinter.Checkbutton(
+            master=self, text="add_canvas", variable=self.flag_save
+        )
         self.chkbtn_save.grid(sticky=tkinter.W)
 
         self.button_add_canvas = tkinter.Button(master=self, text="force add canvas")
@@ -59,18 +61,6 @@ class FrameScreenshot(tkinter.LabelFrame):
         self.calc_debug_frame = self.create_calc_debug_frame(self)
         self.calc_debug_frame.grid(sticky=tkinter.W)
 
-#        def on_release(key):
-#            print('Key released: {0}'.format(
-#                key))
-#            if key == keyboard.Key.esc:
-#                # Stop listener
-#                return False
-#
-#        # Collect events until released
-#        with keyboard.Listener(
-#                on_release=on_release) as listener:
-#            listener.join()
-#
     def event_add_canvas(self, event):
         self.callback_update()
 
@@ -88,7 +78,7 @@ class FrameScreenshot(tkinter.LabelFrame):
         self.label_target_th.grid(sticky=tkinter.W)
         self.entry_target_th = tkinter.Entry(master=frame, width=60)
         # self.entry_target_th.insert(0, "1")
-        self.entry_target_th.insert(0, "0.1") # fuz
+        self.entry_target_th.insert(0, "0.1")  # fuz
         self.entry_target_th.grid(sticky=tkinter.W)
 
         self.label_image_diff_title = tkinter.Label(master=frame, text="image_diff")
@@ -97,10 +87,14 @@ class FrameScreenshot(tkinter.LabelFrame):
         self.label_image_diff.grid(sticky=tkinter.W)
 
         self.button_screenshot_last = tkinter.Button(master=frame)
-        self.button_screenshot_last.bind("<Button-1>", self.event_button_screenshot_last)
+        self.button_screenshot_last.bind(
+            "<Button-1>", self.event_button_screenshot_last
+        )
         self.button_screenshot_last.grid()
         self.button_screenshot_latest = tkinter.Button(master=frame)
-        self.button_screenshot_latest.bind("<Button-1>", self.event_button_screenshot_latest)
+        self.button_screenshot_latest.bind(
+            "<Button-1>", self.event_button_screenshot_latest
+        )
         self.button_screenshot_latest.grid()
         self.event_button_screenshot_latest(1)
         self.last_original_image = self.latest_original_image
@@ -172,31 +166,37 @@ class FrameScreenshot(tkinter.LabelFrame):
         self.save_range_size[2] = int(self.entry_save_right.get())
         self.save_range_size[3] = int(self.entry_save_lower.get())
 
-
     def worker1(self):
-        while(self.flag_start):
+        while self.flag_start:
             if not self.flag_screenshot_ok:
                 continue
-            #time.sleep(2)
+            # time.sleep(2)
             print("get")
             self.event_button_screenshot_latest(1)
             self.event_calc(1)
             self.event_update(1)
-        self.button_start['bg'] = self.off
+        self.button_start["bg"] = self.off
 
     def event_start(self, event):
         if not self.flag_start:
             self.flag_start = True
-            self.button_start['bg'] = self.green
-            t1 = threading.Thread(name='rename worker1', target=self.worker1)
+            self.button_start["bg"] = self.green
+            t1 = threading.Thread(name="rename worker1", target=self.worker1)
             t1.start()
         else:
-            self.button_start['bg'] = self.red
+            self.button_start["bg"] = self.red
             self.flag_start = False
 
     def get_save_image(self):
         image = ImageGrab.grab()
-        image = image.crop((self.save_range_size[0], self.save_range_size[1], self.save_range_size[2]-1, self.save_range_size[3]-1))
+        image = image.crop(
+            (
+                self.save_range_size[0],
+                self.save_range_size[1],
+                self.save_range_size[2] - 1,
+                self.save_range_size[3] - 1,
+            )
+        )
         return image
 
     def event_update(self, event):
@@ -208,11 +208,15 @@ class FrameScreenshot(tkinter.LabelFrame):
                 self.callback_update()
 
     def event_button_screenshot_last(self, event):
-        self.last_original_image, self.last_resize_image = self.screenshot(self.calc_range_size)
+        self.last_original_image, self.last_resize_image = self.screenshot(
+            self.calc_range_size
+        )
         self.button_screenshot_last.configure(image=self.last_resize_image)
 
     def event_button_screenshot_latest(self, event):
-        self.latest_original_image, self.latest_resize_image = self.screenshot(self.calc_range_size)
+        self.latest_original_image, self.latest_resize_image = self.screenshot(
+            self.calc_range_size
+        )
         self.button_screenshot_latest.configure(image=self.latest_resize_image)
 
     def event_button_auto(self, event):
@@ -221,13 +225,13 @@ class FrameScreenshot(tkinter.LabelFrame):
                 # event start はいったん止める
                 self.event_start(1)
             self.flag_auto = True
-            #self.flag_screenshot_ok = False
-            #self.event_start(1)
-            self.button_auto['bg'] = self.green
-            t2 = threading.Thread(name='rename worker2', target=self.worker2)
+            # self.flag_screenshot_ok = False
+            # self.event_start(1)
+            self.button_auto["bg"] = self.green
+            t2 = threading.Thread(name="rename worker2", target=self.worker2)
             t2.start()
         else:
-            self.button_auto['bg'] = self.red
+            self.button_auto["bg"] = self.red
             self.flag_auto = False
 
     def get_screenshot(self):
@@ -251,20 +255,20 @@ class FrameScreenshot(tkinter.LabelFrame):
         # 前準備
         self.acrive_browser()
         self.ep_count = 0
-        while(self.flag_auto):
+        while self.flag_auto:
             self.auto_scroll_komiflo()
-        self.button_auto['bg'] = self.off
+        self.button_auto["bg"] = self.off
 
     def auto_scroll_fuz(self):
         self.get_screenshot()
         try:
             # 各話の最終ページか？
-            x, y = pyautogui.locateCenterOnScreen('fuz_end_ep.png',confidence=0.5)
+            x, y = pyautogui.locateCenterOnScreen("fuz_end_ep.png", confidence=0.5)
             try:
                 # 最後のページか？
-                xx, yy = pyautogui.locateCenterOnScreen('fuz_end.png',confidence=0.5)
+                xx, yy = pyautogui.locateCenterOnScreen("fuz_end.png", confidence=0.5)
                 # 終わる
-                #self.event_button_auto(1)
+                # self.event_button_auto(1)
                 self.flag_auto = False
                 self.get_screenshot()
                 return
@@ -273,14 +277,14 @@ class FrameScreenshot(tkinter.LabelFrame):
             # 次の話へ移動
             if self.ep_count < 13:
                 print("ep_count++")
-                x, y = pyautogui.locateCenterOnScreen('fuz_next_ep.png',confidence=0.5)
+                x, y = pyautogui.locateCenterOnScreen("fuz_next_ep.png", confidence=0.5)
                 pyautogui.moveTo(x, y, duration=0.5)
                 pyautogui.click()
                 time.sleep(1)
                 # 上下のバーをなくすため、中央をクリック
                 pyautogui.moveTo(540, 960, duration=0.5)
                 pyautogui.click()
-                #self.flag_screenshot_ok = True
+                # self.flag_screenshot_ok = True
                 time.sleep(1)
                 # 次のページに行くために左端へ移動
                 pyautogui.moveTo(100, 960, duration=0.5)
@@ -292,34 +296,34 @@ class FrameScreenshot(tkinter.LabelFrame):
         except:
             # 基本は見つからないので次のページへ
             pyautogui.click()
-            #print("no found...")
+            # print("no found...")
         time.sleep(1)
 
     def auto_scroll_komiflo(self):
         self.get_screenshot()
         try:
-            x, y = pyautogui.locateCenterOnScreen('tweet.png',confidence=0.5)
+            x, y = pyautogui.locateCenterOnScreen("tweet.png", confidence=0.5)
             try:
                 # 最後のページか？
-                x, y = pyautogui.locateCenterOnScreen('komi_end.png',confidence=0.5)
+                x, y = pyautogui.locateCenterOnScreen("komi_end.png", confidence=0.5)
                 # 終わる
-                #self.event_button_auto(1)
+                # self.event_button_auto(1)
                 self.flag_auto = False
                 self.get_screenshot()
                 return
             except:
                 pass
             # 次の話へ移動
-            #self.flag_screenshot_ok = False
+            # self.flag_screenshot_ok = False
             pyautogui.moveTo(200, 960, duration=0.5)
             pyautogui.click()
             pyautogui.moveTo(540, 960, duration=0.5)
-            #self.flag_screenshot_ok = True
+            # self.flag_screenshot_ok = True
             time.sleep(0.5)
         except:
             # 基本は見つからないのでスクロール
             pyautogui.scroll(-10)
-            #print("no found...")
+            # print("no found...")
         time.sleep(0.3)
 
     def auto_scroll_dmm(self):
@@ -331,38 +335,46 @@ class FrameScreenshot(tkinter.LabelFrame):
         self.get_screenshot()
         try:
             # 最後のページか？
-            x, y = pyautogui.locateCenterOnScreen('dmm_end.png',confidence=0.9)
+            x, y = pyautogui.locateCenterOnScreen("dmm_end.png", confidence=0.9)
             # 終わる
-            #self.event_button_auto(1)
+            # self.event_button_auto(1)
             self.flag_auto = False
             return
         except:
             # 基本は見つからないのでスクロール
             pyautogui.scroll(-10)
-            #print("no found...")
+            # print("no found...")
         time.sleep(stime)
 
     def event_button_save_preview(self, event):
-        self.save_original_image, self.save_resize_image = self.screenshot(self.save_range_size)
+        self.save_original_image, self.save_resize_image = self.screenshot(
+            self.save_range_size
+        )
         self.button_save_preview.configure(image=self.save_resize_image)
 
     def event_calc(self, event):
-        diff = self.calc_diff_image(self.latest_original_image, self.last_original_image)
+        diff = self.calc_diff_image(
+            self.latest_original_image, self.last_original_image
+        )
         self.label_image_diff.config(text=diff)
 
     def event_add(self, event):
         self.last_original_image = self.latest_original_image
-        self.last_resize_image = MyPIL.resize_image(self.latest_original_image, self.resize_size[0], self.resize_size[1])
+        self.last_resize_image = MyPIL.resize_image(
+            self.latest_original_image, self.resize_size[0], self.resize_size[1]
+        )
         self.button_screenshot_last.configure(image=self.last_resize_image)
 
     def screenshot(self, size):
         image = ImageGrab.grab()
-        image = image.crop((size[0], size[1], size[2]-1, size[3]-1))
-        resize_image = MyPIL.resize_image(image, self.resize_size[0], self.resize_size[1])
+        image = image.crop((size[0], size[1], size[2] - 1, size[3] - 1))
+        resize_image = MyPIL.resize_image(
+            image, self.resize_size[0], self.resize_size[1]
+        )
         return image, resize_image
 
     def pil2cv(self, image):
-        ''' PIL型 -> OpenCV型 '''
+        """PIL型 -> OpenCV型"""
         new_image = np.array(image, dtype=np.uint8)
         if new_image.ndim == 2:  # モノクロ
             pass
@@ -373,7 +385,7 @@ class FrameScreenshot(tkinter.LabelFrame):
         return new_image
 
     def cv2pil(self, image):
-        ''' OpenCV型 -> PIL型 '''
+        """OpenCV型 -> PIL型"""
         new_image = image.copy()
         if new_image.ndim == 2:  # モノクロ
             pass
@@ -391,10 +403,12 @@ class FrameScreenshot(tkinter.LabelFrame):
         ret, image_diff_binary = cv2.threshold(image_diff, 20, 255, cv2.THRESH_BINARY)
         diff_sum = np.sum(image_diff_binary) / 255
         height, width, ch = image_diff_binary.shape
-        self.diff_rate = diff_sum / (height*width)
+        self.diff_rate = diff_sum / (height * width)
 
         self.diff_image = self.cv2pil(image_diff_binary)
-        self.diff_image = MyPIL.resize_image(self.diff_image, self.resize_size[0], self.resize_size[1])
+        self.diff_image = MyPIL.resize_image(
+            self.diff_image, self.resize_size[0], self.resize_size[1]
+        )
         self.button_screenshot_diff.configure(image=self.diff_image)
 
         return self.diff_rate
@@ -420,8 +434,9 @@ class FrameScreenshot(tkinter.LabelFrame):
         if conf.has_option("screenshot", "save_lower"):
             self.save_range_size[3] = conf.getint("screenshot", "save_lower")
 
+
 ###################################################################################################
-if __name__ == '__main__':
+if __name__ == "__main__":
 
     class App(tkinter.LabelFrame):
         def __init__(self, master):
@@ -429,7 +444,7 @@ if __name__ == '__main__':
             self._master = master
             self.frame1 = FrameScreenshot(self)
             self.frame1.pack()
-            self.bind('<Configure>', self._self_bind_config)
+            self.bind("<Configure>", self._self_bind_config)
 
         def _self_bind_config(self, event):
             print(self)
@@ -437,5 +452,5 @@ if __name__ == '__main__':
     root = tkinter.Tk()
     root.geometry("300" + "x" + "400")
     app = App(root)
-    app.pack(fill='x')
+    app.pack(fill="x")
     root.mainloop()

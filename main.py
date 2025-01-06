@@ -1,6 +1,7 @@
 import tkinter
 import configparser
-from frame_myapp import *
+from frame_myapp import FrameMyApp
+
 
 def read_conf():
     ini_file_name = "setting.ini"
@@ -17,16 +18,18 @@ def read_conf():
         y = 1080
     return x, y
 
+
 def hoge():
     app.app_destroy()
     root.destroy()
 
+
 root = tkinter.Tk()
 root.title("")
 x, y = read_conf()
-root.geometry(str(x)+"x"+str(y))
+root.geometry(str(x) + "x" + str(y))
 app = FrameMyApp(root)
-app.pack(fill = tkinter.BOTH)
+app.pack(fill=tkinter.BOTH)
 
 root.protocol("WM_DELETE_WINDOW", hoge)
 
